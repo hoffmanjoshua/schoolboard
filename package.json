@@ -1,0 +1,18 @@
+{
+  "name": "schoolboard",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/www"
+  },
+  "author": "Joshua Hoffman <hoffmanjoshua@outlook.com> (hoffmanjoshua.com)",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "mongodb": "~2.0.33",
+    "morgan": "~1.9.0"
+  }
+}
