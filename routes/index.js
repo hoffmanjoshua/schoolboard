@@ -1,17 +1,23 @@
 var express = require('express');
 var router = express.Router();
 
+
 var mongodb = require('mongodb');
 
 var app = express();
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 /* GET home page. */
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-var port = "5000"
-app.set('port', port)
+var port = "5000";
+app.set('port', port);
 // Create a directory called public and then a directory named img inside of it
 app.use(express.static(__dirname + '/public'));
 
@@ -64,7 +70,7 @@ app.get('/school', function(req, res){
 });
 
 //LOGIN PAGE
-router.post('/authenticateuser', function (req, res) {
+app.post('/authenticateuser', function (req, res) {
   var MongoClient = mongodb.MongoClient;
   var url = 'mongodb://localhost:27017/schoolboard';
   MongoClient.connect(url, function (err, db) { // Connect to the server
@@ -72,6 +78,7 @@ router.post('/authenticateuser', function (req, res) {
       console.log('Unable to connect to the Server:', err);
     } else {
       console.log('Connected to Server');
+      console.log(req);
       var username = req.body.username;
       var pass = req.body.pass;
       console.log(username);
