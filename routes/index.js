@@ -83,24 +83,124 @@ app.post('/authenticateuser', function (req, res) {
       var pass = req.body.pass;
       console.log(username);
       console.log(pass);
-      var collection = db.collection('login'); // Get the documents collection
+      var collection = db.collection('login'); 
       collection.find({
         "username": username,
-        "password": pass
-      }).toArray(function (err, result) { // Insert the student data
+        "password": pass,
+      }).toArray(function (err, result) { 
         console.log(result);
         if (err) {
           console.log(err);
         } else if (result.length) {
           //set COOKIE
           res.cookie("username", username);
-          res.redirect("/"); // Redirect to the updated student list
+          if (result[0].type == "ambassador") {
+            res.redirect("myaccount/ambassador"); // Redirect to the updated student list
+          } else if (result[0].type == "student") {
+            res.redirect("myaccount/student");
+          } else if (result[0].type == "rep") {
+            res.redirect("myaccount/rep");
+          }
         } else {
           console.log('redirecting to login');
           res.redirect('signup-login');
-          //alert("Invalid Login Credentials");
         }
         db.close();
+      });
+    }
+  });
+});
+
+//REGISTRATION
+
+//student
+app.post('/addstudent', function (req, res) {
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var collection = db.collection('login'); // Get the documents collection
+      var student1 = {
+        name: req.body.Name,
+        HSyear: req.body.HSYear, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
+        HighSchool: req.body.HighSchool,
+        admissionYear: req.body.admissionYear,
+        email: req.body.Email,
+        username: req.body.Username,
+        password: req.body.Password,
+        type: "student"
+      };
+      collection.insert([student1], function (err, result) { // Insert the student data
+        if (err) {
+          console.log(err);
+        } else {
+          res.redirect("/"); // Redirect to home
+        }
+      });
+    }
+  });
+});
+
+//ambassador
+app.post('/addambassador', function (req, res) {
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var collection = db.collection('login'); // Get the documents collection
+      var ambassador1 = {
+        name: req.body.Name,
+        gradYear: req.body.gradYear, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
+        year: req.body.year,
+        major: req.body.major,
+        email: req.body.Email,
+        bio: req.body.Bio,
+        username: req.body.Username,
+        password: req.body.Password,
+        type: "ambassador"
+      };
+      collection.insert([ambassador1], function (err, result) { // Insert the student data
+        if (err) {
+          console.log(err);
+        } else {
+          res.redirect("/"); // Redirect to home
+        }
+      });
+    }
+  });
+});
+
+//rep
+app.post('/addrep', function (req, res) {
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var collection = db.collection('login'); // Get the documents collection
+      var rep1 = {
+        name: req.body.Name,
+        role: req.body.Role, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
+        email: req.body.Email,
+        bio: req.body.Bio,
+        username: req.body.Username,
+        password: req.body.Password,
+        type: "rep"
+      };
+      collection.insert([rep1], function (err, result) { // Insert the student data
+        if (err) {
+          console.log(err);
+        } else {
+          res.redirect("/"); // Redirect to home
+        }
       });
     }
   });
