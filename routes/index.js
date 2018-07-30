@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+
 var handlebars = require('express-handlebars').create({
   defaultLayout: 'main'
 });
@@ -89,6 +90,10 @@ app.post('/authenticateuser', function (req, res) {
       });
     }
   });
+});
+
+app.post('/logout', function (req, res) {
+  res.clearCookie("username");
 });
 
 //REGISTRATION
