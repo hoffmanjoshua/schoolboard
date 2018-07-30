@@ -146,12 +146,6 @@ app.get('/signup/ambassador', function (req, res) {
   res.render('signup-ambassador');
 });
 
-//SCHOOL PAGE
-app.get('/school', function (req, res) {
-  // Point at the school-stanford.handlebars view
-  res.render('school');
-});
-
 //LOGIN PAGE
 app.post('/authenticateuser', function (req, res) {
   var MongoClient = mongodb.MongoClient;
@@ -289,8 +283,43 @@ app.post('/addrep', function (req, res) {
   });
 });
 
+//--SCHOOLS--
 
-//ERRORS
+//Stanford
+app.get('/school/stanford', function (req, res) {
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var name = "Stanford University";
+      var collection = db.collection('schools');
+      collection.findOne({
+        "name": name,
+      }, function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/')
+        } else if (result) {
+          console.log(result.name);
+          res.render('school', {
+            school: result,
+          });
+        } else {
+          console.log(result);
+          res.redirect('/')
+        }
+      })
+    }
+  })
+});
+
+
+
+//--ERRORS--
 
 //404
 app.use(function (req, res) {
