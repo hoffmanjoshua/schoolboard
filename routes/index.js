@@ -34,31 +34,64 @@ app.get('/signup-login', function(req, res){
  app.get('/myaccount/student', function(req, res){
     // Point at the myaccount-student.handlebars view
    res.render('myaccount-student');
-//    if (!req.cookies.username) {
-//      res.redirect('/signup-login')
-//    }
-//    var username = req.cookies.username;
-//    collection.findOne({
-//     "username": username,
-//   }, function (err, result) { 
-//     console.log(result);
-//     if (err) {
-//       res.redirect('/signup-login')
-//     } else if (result.length) {
-//       res.render('myaccount-student', { name: result.name});
-//     }
-//   }
-//  )
+   if (!req.cookies.username) {
+     res.redirect('/signup-login')
+   }
+   var username = req.cookies.username;
+   var collection = db.collection('login'); 
+   collection.findOne({
+    "username": username,
+  }, function (err, result) { 
+    console.log(result);
+    if (err) {
+      res.redirect('/signup-login')
+    } else if (result.length) {
+      res.render('myaccount-student', { name: result.name});
+    }
+  }
+ )
 });
 
  app.get('/myaccount/rep', function(req, res){
     // Point at the myaccount-rep.handlebars view
-   res.render('myaccount-rep');
+    res.render('myaccount-rep');
+    if (!req.cookies.username) {
+      res.redirect('/signup-login')
+    }
+    var username = req.cookies.username;
+    var collection = db.collection('login'); 
+    collection.findOne({
+     "username": username,
+   }, function (err, result) { 
+     console.log(result);
+     if (err) {
+       res.redirect('/signup-login')
+     } else if (result.length) {
+       res.render('myaccount-rep', { name: result.name});
+     }
+   }
+  )
  });
 
  app.get('/myaccount/ambassador', function(req, res){
     // Point at the myaccount-ambassador.handlebars view
-   res.render('myaccount-ambassador');
+    es.render('myaccount-ambassador');
+    if (!req.cookies.username) {
+      res.redirect('/signup-login')
+    }
+    var username = req.cookies.username;
+    var collection = db.collection('login'); 
+    collection.findOne({
+     "username": username,
+   }, function (err, result) { 
+     console.log(result);
+     if (err) {
+       res.redirect('/signup-login')
+     } else if (result.length) {
+       res.render('myaccount-ambassador', { name: result.name});
+     }
+   }
+  )
  });
 
  //SIGNUP PAGES

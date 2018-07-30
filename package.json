@@ -10,9 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "cookie-parser": "^1.4.3",
+    "cookies": "^0.7.1",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
-    "mongodb": "~2.0.33",
-    "morgan": "~1.9.0"
+    "morgan": "~1.9.0",
+    "kerberos": "~0.0.17",
+    "mongodb": "~2.0.33"
   }
 }
