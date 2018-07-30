@@ -51,6 +51,104 @@ app.get('/signup/ambassador', function (req, res) {
   res.render('signup-ambassador');
 });
 
+
+//MYACCOUNT
+app.get('/myaccount/student', function (req, res) {
+  console.log('in student');
+
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var username = req.cookies.username;
+      var collection = db.collection('login');
+      collection.findOne({
+        "username": username,
+      }, function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/signup-login')
+        } else if (result) {
+          console.log(result.name);
+          res.render('myaccount-student', {
+            student: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/signup-login')
+        }
+      })
+    }
+  })
+});
+
+app.get('/myaccount/rep', function (req, res) {  
+
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var username = req.cookies.username;
+      var collection = db.collection('login');
+      collection.findOne({
+        "username": username,
+      }, function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/signup-login')
+        } else if (result) {
+          console.log(result.name);
+          res.render('myaccount-rep', {
+            rep: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/signup-login')
+        }
+      })
+    }
+  })
+});
+
+app.get('/myaccount/ambassador', function (req, res) {
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var username = req.cookies.username;
+      var collection = db.collection('login');
+      collection.findOne({
+        "username": username,
+      }, function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/signup-login')
+        } else if (result) {
+          console.log(result.name);
+          res.render('myaccount-ambassador', {
+            ambassador: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/signup-login')
+        }
+      })
+    }
+  })
+});
+
 //LOGIN PAGE
 app.post('/authenticateuser', function (req, res) {
   var MongoClient = mongodb.MongoClient;
@@ -73,11 +171,11 @@ app.post('/authenticateuser', function (req, res) {
           //set COOKIE
           res.cookie("username", username);
           if (result[0].type == "ambassador") {
-            res.redirect("myaccount/ambassador"); // Redirect to the updated student list
+            res.redirect("/myaccount/ambassador"); // Redirect to the updated student list
           } else if (result[0].type == "student") {
-            res.redirect("myaccount/student");
+            res.redirect("/myaccount/student");
           } else if (result[0].type == "rep") {
-            res.redirect("myaccount/rep");
+            res.redirect("/myaccount/rep");
           } else {
             console.log('account type not set')
             res.redirect('signup-login');
