@@ -19,8 +19,8 @@ var handlebars = require('express-handlebars').create({
 });
 
 app.engine('handlebars', handlebars.engine);
-app.set('view engine', 'handlebars');
-var port = "5000";
+app.set('view engine', 'handlebars'); //Set the GUI as handlebars
+var port = "5000"; //Set the port to be 5000
 app.set('port', port);
 // Create a directory called public and then a directory named img inside of it
 app.use(express.static(__dirname + '/public'));
@@ -54,6 +54,7 @@ app.get('/signup/ambassador', function (req, res) {
 
 //MYACCOUNT
 
+//main
 app.get('/myaccount', function (req, res) {
   var MongoClient = mongodb.MongoClient;
   var url = 'mongodb://localhost:27017/schoolboard';
@@ -92,7 +93,7 @@ app.get('/myaccount', function (req, res) {
 });
 
 
-
+//student
 app.get('/myaccount/student', function (req, res) {
   console.log('in student');
 
@@ -126,6 +127,39 @@ app.get('/myaccount/student', function (req, res) {
   })
 });
 
+//ambassador
+app.get('/myaccount/ambassador', function (req, res) {
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var username = req.cookies.username;
+      var collection = db.collection('login');
+      collection.findOne({
+        "username": username,
+      }, function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/signup-login')
+        } else if (result) {
+          console.log(result.name);
+          res.render('myaccount-ambassador', {
+            ambassador: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/signup-login')
+        }
+      })
+    }
+  })
+});
+
+//representative
 app.get('/myaccount/rep', function (req, res) {  
 
   var mongoClient = mongodb.MongoClient;
@@ -148,37 +182,6 @@ app.get('/myaccount/rep', function (req, res) {
           console.log(result.name);
           res.render('myaccount-rep', {
             rep: result
-          });
-        } else {
-          console.log(result);
-          res.redirect('/signup-login')
-        }
-      })
-    }
-  })
-});
-
-app.get('/myaccount/ambassador', function (req, res) {
-  var mongoClient = mongodb.MongoClient;
-
-  var url = "mongodb://localhost:27017/schoolboard";
-
-  mongoClient.connect(url, function (err, db) {
-    if (err) {
-      console.log("Couldn't connect to database.");
-    } else {
-      var username = req.cookies.username;
-      var collection = db.collection('login');
-      collection.findOne({
-        "username": username,
-      }, function (err, result) {
-        if (err) {
-          console.log("error");
-          res.redirect('/signup-login')
-        } else if (result) {
-          console.log(result.name);
-          res.render('myaccount-ambassador', {
-            ambassador: result
           });
         } else {
           console.log(result);
@@ -230,6 +233,8 @@ app.post('/authenticateuser', function (req, res) {
   });
 });
 
+
+//LOGOUT
 app.post('/logout', function (req, res) {
   res.clearCookie("username");
   res.redirect('/signup-login')
@@ -363,33 +368,7 @@ app.post('/updatestudent', function (req, res) {
   });
 });
 
-app.post('/updaterep', function (req, res) {
-  var MongoClient = mongodb.MongoClient;
-  var url = 'mongodb://localhost:27017/schoolboard';
-  MongoClient.connect(url, function (err, db) { // Connect to the server
-    if (err) {
-      console.log('Unable to connect to the Server:', err);
-    } else {
-      console.log('Connected to Server');
-      var collection = db.collection('login'); // Get the documents collection
-      var olddata = { 'username' : req.cookies.username }
-      var rep1 = { $set: {
-        name: req.body.Name,
-        role: req.body.Role, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
-        email: req.body.Email,
-        bio: req.body.Bio
-      }};
-      collection.update(olddata, rep1, function (err, result) { // Updates the student data
-        if (err) {
-          console.log(err);
-        } else {
-          res.redirect("/myaccount/rep"); // Redirect to your account
-        }
-      });
-    }
-  });
-});
-
+//ambassador
 app.post('/updateambassador', function (req, res) {
   var MongoClient = mongodb.MongoClient;
   var url = 'mongodb://localhost:27017/schoolboard';
@@ -413,6 +392,34 @@ app.post('/updateambassador', function (req, res) {
           console.log(err);
         } else {
           res.redirect("/myaccount/ambassador"); // Redirect to your account
+        }
+      });
+    }
+  });
+});
+
+//rep
+app.post('/updaterep', function (req, res) {
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var collection = db.collection('login'); // Get the documents collection
+      var olddata = { 'username' : req.cookies.username }
+      var rep1 = { $set: {
+        name: req.body.Name,
+        role: req.body.Role, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
+        email: req.body.Email,
+        bio: req.body.Bio
+      }};
+      collection.update(olddata, rep1, function (err, result) { // Updates the student data
+        if (err) {
+          console.log(err);
+        } else {
+          res.redirect("/myaccount/rep"); // Redirect to your account
         }
       });
     }
@@ -467,7 +474,7 @@ app.use(function (req, res) {
   res.render('404');
 });
 
-// 500
+//500
 app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500);
@@ -475,7 +482,7 @@ app.use(function (err, req, res, next) {
   res.render('500');
 });
 
-
+//Dynamicizes the webpage
 app.listen(app.get('port'), function () {
   console.log('Express started on http://localhost:' +
     app.get('port') + '; press Ctrl-C to terminate');
