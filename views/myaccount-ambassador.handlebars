@@ -13,7 +13,7 @@
     </form>
     <br>
     <h2>Profile &amp; Settings</h2>
-    <form class="form">
+    <form class="form" name="form" action="/updateambassador" method="post">
         Name:
         <input class="form-control" type="text" name="Name" value="{{ambassador.name}}">
         <br> Expected year of graduation:
@@ -28,5 +28,10 @@
         <textarea class="form-control" name="Bio">{{ambassador.bio}}</textarea>
         <br>
         <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+    <br>
+    <br>
+    <form method="post" action="/logout">
+        <input class="btn btn-secondary" type="submit" value="Logout" name="logout">
     </form>
 </div>
