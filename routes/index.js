@@ -291,6 +291,38 @@ app.post('/addrep', function (req, res) {
   });
 });
 
+//UPDATE
+
+//students
+app.post('/updatestudent', function (req, res) {
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var collection = db.collection('login'); // Get the documents collection
+      var olddata = { 'username' : req.cookies.username }
+      var student1 = { $set: {
+        name: req.body.Name,
+        HSyear: req.body.HSYear, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
+        HighSchool: req.body.HighSchool,
+        admissionYear: req.body.admissionYear,
+        email: req.body.Email,
+        type: "student"
+      }};
+      collection.update(olddata, student1, function (err, result) { // Updates the student data
+        if (err) {
+          console.log(err);
+        } else {
+          res.redirect("/myaccount/student"); // Redirect to your account
+        }
+      });
+    }
+  });
+});
+
 //--SCHOOLS--
 
 //Stanford
