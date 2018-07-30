@@ -15,17 +15,17 @@
     <h2>Profile &amp; Settings</h2>
     <form class="form">
         Name:
-        <input class="form-control" type="text" name="Name" value="">
+        <input class="form-control" type="text" name="Name" value="{{ambassador.name}}">
         <br> Expected year of graduation:
-        <input class="form-control" name="gradYear" type="text" value="">
+        <input class="form-control" name="gradYear" type="text" value="{{ambassador.gradYear}}">
         <br> Current year in college:
-        <input class="form-control" type="text" name="year" value="">
+        <input class="form-control" type="text" name="year" value="{{ambassador.year}}">
         <br> Major:
-        <input class="form-control" name="major" type="text" value="">
+        <input class="form-control" name="major" type="text" value="{{ambassador.major}}">
         <br> Email:
-        <input class="form-control" type="email" value="" name="Email">
+        <input class="form-control" type="email" value="{{ambassador.email}}" name="Email">
         <br> Bio:
-        <textarea class="form-control" name="Bio"></textarea>
+        <textarea class="form-control" name="Bio" value="{{ambassador.bio}}"></textarea>
         <br>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>

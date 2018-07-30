@@ -25,11 +25,13 @@
     <h2>Profile &amp; Settings</h2>
     <form class="form">
         Name:
-        <input class="form-control" type="text" name="Name" value="">
+        <input class="form-control" type="text" name="Name" value="{{rep.name}}">
         <br> Role/title:
-        <input class="form-control" type="text" name="Role" value="">
+        <input class="form-control" type="text" name="Role" value="{{rep.role}}">
         <br> Bio:
-        <textarea class="form-control" name="Bio" value=""></textarea>
+        <textarea class="form-control" name="Bio" value="{{rep.bio}}"></textarea>
+        <br> Email:
+        <textarea class="form-control" name="Email" value="{{rep.email}}"></textarea>
         <br>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>

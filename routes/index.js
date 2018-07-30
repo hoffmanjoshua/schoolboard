@@ -5,13 +5,18 @@ var mongodb = require('mongodb');
 
 var app = express();
 
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
 /* GET home page. */
-var handlebars = require('express-handlebars').create({defaultLayout:'main'});
+var handlebars = require('express-handlebars').create({
+  defaultLayout: 'main'
+});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
@@ -20,100 +25,131 @@ app.set('port', port);
 // Create a directory called public and then a directory named img inside of it
 app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(req, res){
-   // Point at the home.handlebars view
+app.get('/', function (req, res) {
+  // Point at the home.handlebars view
   res.render('home');
 });
 
-app.get('/signup-login', function(req, res){
-    // Point at the signup-login.handlebars view
-   res.render('signup-login');
- });
-
- //MYACCOUNT
- app.get('/myaccount/student', function(req, res){
-    // Point at the myaccount-student.handlebars view
-   res.render('myaccount-student');
-   if (!req.cookies.username) {
-     res.redirect('/signup-login')
-   }
-   var username = req.cookies.username;
-   var collection = db.collection('login'); 
-   collection.findOne({
-    "username": username,
-  }, function (err, result) { 
-    console.log(result);
-    if (err) {
-      res.redirect('/signup-login')
-    } else if (result.length) {
-      res.render('myaccount-student', { name: result.name});
-    }
-  }
- )
+app.get('/signup-login', function (req, res) {
+  // Point at the signup-login.handlebars view
+  res.render('signup-login');
 });
 
- app.get('/myaccount/rep', function(req, res){
-    // Point at the myaccount-rep.handlebars view
-    res.render('myaccount-rep');
-    if (!req.cookies.username) {
-      res.redirect('/signup-login')
+//MYACCOUNT
+app.get('/myaccount/student', function (req, res) {
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var username = req.cookies.username;
+      var collection = db.collection('login');
+      collection.findOne({
+        "username": username,
+      }, function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/signup-login')
+        } else if (result) {
+          console.log(result.name);
+          res.render('myaccount-student', {
+            student: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/signup-login')
+        }
+      })
     }
-    var username = req.cookies.username;
-    var collection = db.collection('login'); 
-    collection.findOne({
-     "username": username,
-   }, function (err, result) { 
-     console.log(result);
-     if (err) {
-       res.redirect('/signup-login')
-     } else if (result.length) {
-       res.render('myaccount-rep', { name: result.name});
-     }
-   }
-  )
- });
+  })
+});
 
- app.get('/myaccount/ambassador', function(req, res){
-    // Point at the myaccount-ambassador.handlebars view
-    es.render('myaccount-ambassador');
-    if (!req.cookies.username) {
-      res.redirect('/signup-login')
+app.get('/myaccount/rep', function (req, res) {  
+
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var username = req.cookies.username;
+      var collection = db.collection('login');
+      collection.findOne({
+        "username": username,
+      }, function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/signup-login')
+        } else if (result) {
+          console.log(result.name);
+          res.render('myaccount-rep', {
+            rep: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/signup-login')
+        }
+      })
     }
-    var username = req.cookies.username;
-    var collection = db.collection('login'); 
-    collection.findOne({
-     "username": username,
-   }, function (err, result) { 
-     console.log(result);
-     if (err) {
-       res.redirect('/signup-login')
-     } else if (result.length) {
-       res.render('myaccount-ambassador', { name: result.name});
-     }
-   }
-  )
- });
+  })
+});
 
- //SIGNUP PAGES
- app.get('/signup/student', function(req, res){
-    // Point at the signup-student.handlebars view
-   res.render('signup-student');
- });
+app.get('/myaccount/ambassador', function (req, res) {
+  var mongoClient = mongodb.MongoClient;
 
- app.get('/signup/rep', function(req, res){
-    // Point at the signup-rep.handlebars view
-   res.render('signup-rep');
- });
- 
- app.get('/signup/ambassador', function(req, res){
-    // Point at the signup-ambassador.handlebars view
-   res.render('signup-ambassador');
- });
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var username = req.cookies.username;
+      var collection = db.collection('login');
+      collection.findOne({
+        "username": username,
+      }, function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/signup-login')
+        } else if (result) {
+          console.log(result.name);
+          res.render('myaccount-ambassador', {
+            ambassador: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/signup-login')
+        }
+      })
+    }
+  })
+});
+
+//SIGNUP PAGES
+app.get('/signup/student', function (req, res) {
+  // Point at the signup-student.handlebars view
+  res.render('signup-student');
+});
+
+app.get('/signup/rep', function (req, res) {
+  // Point at the signup-rep.handlebars view
+  res.render('signup-rep');
+});
+
+app.get('/signup/ambassador', function (req, res) {
+  // Point at the signup-ambassador.handlebars view
+  res.render('signup-ambassador');
+});
 
 //SCHOOL PAGE
-app.get('/school', function(req, res){
+app.get('/school', function (req, res) {
   // Point at the school-stanford.handlebars view
- res.render('school');
+  res.render('school');
 });
 
 //LOGIN PAGE
@@ -125,17 +161,13 @@ app.post('/authenticateuser', function (req, res) {
       console.log('Unable to connect to the Server:', err);
     } else {
       console.log('Connected to Server');
-      console.log(req);
       var username = req.body.username;
       var pass = req.body.pass;
-      console.log(username);
-      console.log(pass);
-      var collection = db.collection('login'); 
+      var collection = db.collection('login');
       collection.find({
         "username": username,
         "password": pass,
-      }).toArray(function (err, result) { 
-        console.log(result);
+      }).toArray(function (err, result) {
         if (err) {
           console.log(err);
         } else if (result.length) {
@@ -147,9 +179,12 @@ app.post('/authenticateuser', function (req, res) {
             res.redirect("myaccount/student");
           } else if (result[0].type == "rep") {
             res.redirect("myaccount/rep");
+          } else {
+            console.log('account type not set')
+            res.redirect('signup-login');
           }
         } else {
-          console.log('redirecting to login');
+          console.log(result);
           res.redirect('signup-login');
         }
         db.close();
@@ -257,7 +292,7 @@ app.post('/addrep', function (req, res) {
 //ERRORS
 
 //404
-app.use(function(req, res) {
+app.use(function (req, res) {
   // Define the content type
   res.type('text/html');
   // The default status is 200
@@ -267,7 +302,7 @@ app.use(function(req, res) {
 });
 
 // 500
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500);
   // Point at the 500.handlebars view
@@ -275,7 +310,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.listen(app.get('port'), function(){
+app.listen(app.get('port'), function () {
   console.log('Express started on http://localhost:' +
     app.get('port') + '; press Ctrl-C to terminate');
 });

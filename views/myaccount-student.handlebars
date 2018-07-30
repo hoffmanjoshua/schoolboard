@@ -29,15 +29,15 @@
     <h2>Profile &amp; Settings</h2>
     <form class="form">
         Name:
-        <input class="form-control" type="text" name="Name" value="{{name}}" id="name">
+        <input class="form-control" type="text" name="Name" value="{{student.name}}" id="name">
         <br> Current year in High School:
-        <input class="form-control" name="HSYear" type="text" value="">
+        <input class="form-control" name="HSYear" type="text" value="{{student.HSYear}}">
         <br> High School:
-        <input class="form-control" type="text" name="HighSchool" value="">
+        <input class="form-control" type="text" name="HighSchool" value="{{student.HighSchool}}">
         <br> Expected year of admission:
-        <input class="form-control" name="admissionYear" type="text" value="">
+        <input class="form-control" name="admissionYear" type="text" value="{{student.admissionYear}}">
         <br> Email:
-        <input class="form-control" type="email" value="" name="Email">
+        <input class="form-control" type="email" value="{{student.email}}" name="Email">
         <br>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
