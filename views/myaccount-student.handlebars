@@ -11,18 +11,12 @@
             </tr>
         </thead>
         <tbody>
+            {{#each student.schoolsFollowing}}​
             <tr>
-                <th scope="row">Stanford</th>
-                <td>Palo Alto, California</td>
+                <th scope="row"><a href="{{this.path}}">{{this.name}}</a></th>
+                <td>{{this.location}}</td>
             </tr>
-            <tr>
-                <th scope="row">Harvard</th>
-                <td>Cambridge, Massachusetts</td>
-            </tr>
-            <tr>
-                <th scope="row">Yale</th>
-                <td>New Haven, Connecticut</td>
-            </tr>
+            {{/each}}
         </tbody>
     </table>
     <br>
