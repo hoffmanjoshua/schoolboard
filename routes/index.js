@@ -213,6 +213,7 @@ app.post('/addstudent', function (req, res) {
         email: req.body.Email,
         username: req.body.Username,
         password: req.body.Password,
+        schoolsFollowing: [],
         type: "student"
       };
       collection.insert([student1], function (err, result) { // Insert the student data
