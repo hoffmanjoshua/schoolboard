@@ -53,6 +53,46 @@ app.get('/signup/ambassador', function (req, res) {
 
 
 //MYACCOUNT
+
+app.get('/myaccount', function (req, res) {
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var username = req.cookies.username;
+      var collection = db.collection('login');
+      collection.find({
+        "username": username,
+      }).toArray(function (err, result) {
+        if (err) {
+          console.log(err);
+        } else if (result.length) {
+          //set COOKIE
+          if (result[0].type == "ambassador") {
+            res.redirect("/myaccount/ambassador"); // Redirect to the updated student list
+          } else if (result[0].type == "student") {
+            res.redirect("/myaccount/student");
+          } else if (result[0].type == "rep") {
+            res.redirect("/myaccount/rep");
+          } else {
+            console.log('account type not set')
+            res.redirect('signup-login');
+          }
+        } else {
+          console.log(result);
+          console.log('account not created')
+        }
+        db.close();
+      });
+    }
+  });
+});
+
+
+
 app.get('/myaccount/student', function (req, res) {
   console.log('in student');
 
@@ -317,6 +357,62 @@ app.post('/updatestudent', function (req, res) {
           console.log(err);
         } else {
           res.redirect("/myaccount/student"); // Redirect to your account
+        }
+      });
+    }
+  });
+});
+
+app.post('/updaterep', function (req, res) {
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var collection = db.collection('login'); // Get the documents collection
+      var olddata = { 'username' : req.cookies.username }
+      var rep1 = { $set: {
+        name: req.body.Name,
+        role: req.body.Role, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
+        email: req.body.Email,
+        bio: req.body.Bio
+      }};
+      collection.update(olddata, rep1, function (err, result) { // Updates the student data
+        if (err) {
+          console.log(err);
+        } else {
+          res.redirect("/myaccount/rep"); // Redirect to your account
+        }
+      });
+    }
+  });
+});
+
+app.post('/updateambassador', function (req, res) {
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var collection = db.collection('login'); // Get the documents collection
+      var olddata = { 'username' : req.cookies.username }
+      var ambassador1 = { $set: {
+        name: req.body.Name,
+        gradYear: req.body.gradYear, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
+        year: req.body.year,
+        major: req.body.major,
+        email: req.body.Email,
+        bio: req.body.Bio
+      }};
+      collection.update(olddata, ambassador1, function (err, result) { // Updates the student data
+        if (err) {
+          console.log(err);
+        } else {
+          res.redirect("/myaccount/ambassador"); // Redirect to your account
         }
       });
     }
