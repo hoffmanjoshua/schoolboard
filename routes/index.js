@@ -192,6 +192,7 @@ app.post('/authenticateuser', function (req, res) {
 
 app.post('/logout', function (req, res) {
   res.clearCookie("username");
+  res.redirect('/signup-login')
 });
 
 //REGISTRATION
