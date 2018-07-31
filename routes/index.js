@@ -35,6 +35,13 @@ app.get('/signup-login', function (req, res) {
   res.render('signup-login');
 });
 
+//FOR ADMIN ONLY
+app.get('/school/add', function (req, res) {
+  // Point at the signup-student.handlebars view
+  res.render('addschool');
+});
+
+
 //SIGNUP PAGES
 app.get('/signup/student', function (req, res) {
   // Point at the signup-student.handlebars view
@@ -226,18 +233,19 @@ app.get('/myaccount/rep', function (req, res) {
         "username": username,
       }, function (err, result) {
         var collection = db.collection('schools');
-        collection.find({
+        collection.findOne({
           "name": result.school,
-        }).toArray(function (err, resultschool) {
+        }, function (err, resultschool) {
           if (err) {
             console.log("error");
             res.redirect('/signup-login')
           } else if (resultschool) {
             console.log('hello');
             console.log(resultschool);
+            recentpost = resultschool.needsApproval[0];
             res.render('myaccount-rep', {
               rep: result,
-              posts: resultschool[0].needsApproval
+              posts: recentpost
             });
           } else {
             console.log(result);
@@ -534,6 +542,54 @@ app.post('/submitforapproval', function (req, res) {
     }
   });
 });
+
+//ambassador submit post for approval
+app.post('/approvepost', function (req, res) {
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var collection = db.collection('schools'); // Get the documents collection
+      var data = {
+        'name': req.body.School
+      };
+      var post1 = {
+        $push: {
+          posts: {
+            "title": req.body.Title,
+            "author": req.body.Author,
+            "content": req.body.Content
+          }
+        }
+      };
+      var removepost = {
+        $pull: {
+          needsApproval: {
+            "title": req.body.Title,
+          }
+        }
+      };
+      collection.update(data, post1, function (err, result) { // Updates the student data
+        if (err) {
+          console.log(err);
+        } else {
+          collection.update(data, removepost, function (err2, result2) {
+              if (err2) {
+                console.log(err2)
+              } else {
+                console.log('Post approved!')
+                res.redirect("/myaccount/rep"); // Redirect to your account
+              }
+            }
+          )}
+      });
+    }
+  });
+});
+
 
 //rep approve post
 
