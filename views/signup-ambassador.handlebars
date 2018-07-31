@@ -5,21 +5,28 @@
     <h2>Sign Up</h2>
     <form class="form" method="post" action="/addambassador">
         Name:
-        <input class="form-control" type="text" name="Name">
+        <input class="form-control" type="text" name="Name" required>
+        <br> School:
+        <select class="form-control" name="school" required>
+            <option value="" selected disabled hidden>Choose your school</option>
+            {{#each schools}}
+                <option value="{{this.name}}">{{this.name}}</option>
+            {{/each}}
+        </select>
         <br> Expected year of graduation:
-        <input class="form-control" name="gradYear" type="text">
+        <input class="form-control" name="gradYear" type="text" required>
         <br> Current year in college:
-        <input class="form-control" type="text" name="year">
+        <input class="form-control" type="text" name="year" required>
         <br> Major:
-        <input class="form-control" name="major" type="text">
+        <input class="form-control" name="major" type="text" required>
         <br> Email:
-        <input class="form-control" type="email" name="Email">
-        <br> Bio:
+        <input class="form-control" type="email" name="Email" required>
+        <br> Bio (optional):
         <textarea class="form-control" name="Bio"></textarea>
         <br> Username:
-        <input class="form-control" type="text" name="Username">
+        <input class="form-control" type="text" name="Username" required>
         <br> Password:
-        <input class="form-control" type="password" name="Password">
+        <input class="form-control" type="password" name="Password" required>
         <br>
         <button type="submit" class="btn btn-primary">Sign Up</button>
     </form>

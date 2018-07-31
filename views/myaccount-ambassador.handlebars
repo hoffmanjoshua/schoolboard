@@ -3,9 +3,11 @@
         <span class="font-weight-bold">Ambassador</span> Account</h1>
     <br>
     <h2>Write Post</h2>
-    <form>
+    <form action="/submitforapproval" method="post" name="form">
         Title:
         <input class="form-control" type="text" name="Title">
+        <input hidden tyoe="text" name="School" value="{{ambassador.school}}">
+        <input hidden tyoe="text" name="author" value="{{ambassador.name}}">
         <br> Post:
         <textarea class="form-control" name="content"></textarea>
         <br>
@@ -16,6 +18,8 @@
     <form class="form" name="form" action="/updateambassador" method="post">
         Name:
         <input class="form-control" type="text" name="Name" value="{{ambassador.name}}">
+        <br> School:
+        <input type="text" name="school" class="form-control" value="{{ambassador.school}}" readonly>
         <br> Expected year of graduation:
         <input class="form-control" name="gradYear" type="text" value="{{ambassador.gradYear}}">
         <br> Current year in college:

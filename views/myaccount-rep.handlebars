@@ -13,11 +13,13 @@
     </form>
     <br>
     <h2>Approve Posts</h2>
+    {{#each school.posts}}
     <div class="jumbotron">
-        <h3>Title</h3>
-        <h4>Author</h4>
-        <p>Post content here.</p>
+        <h3>{{this.title}}</h3>
+        <h4>{{this.author}}</h4>
+        <p>{{this.content}}</p>
     </div>
+    {{/each}}
     <form>
         <button type="submit" class="btn btn-primary">Approve</button>
     </form>
@@ -26,6 +28,8 @@
     <form class="form" name="form" action="/updaterep" method="post">
         Name:
         <input class="form-control" type="text" name="Name" value="{{rep.name}}">
+        <br> School:
+        <input type="text" name="school" class="form-control" value="{{rep.school}}" readonly>
         <br> Role/title:
         <input class="form-control" type="text" name="Role" value="{{rep.role}}">
         <br> Bio:
