@@ -1,0 +1,18 @@
+<div class="container mt-3">
+    <h1 class="text-center">Admin Controls</h1>
+
+    <h2>Schools:</h2>
+    <form action="/gotoschool" method="post">
+    <select class="form-control" name="school" required>
+        <option value="" selected disabled hidden>Schools</option>
+        {{#each schools}}
+        <option value="{{this.path}}">{{this.name}}</option>
+        {{/each}}
+    </select>
+    <br>
+    <input type="submit" value="Go to school" class="btn btn-primary">
+    </form>
+    <br>
+    <hr>
+    <a class="btn btn-primary" margin="margin: auto;"href="/school/add">Add School</a>
+</div>

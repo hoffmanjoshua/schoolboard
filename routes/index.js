@@ -35,6 +35,39 @@ app.get('/signup-login', function (req, res) {
   res.render('signup-login');
 });
 
+app.get('/admin', function (req, res) {
+
+  if (req.cookies.username != "admin"){
+    res.redirect('/')
+    return false
+  }
+
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var collection = db.collection('schools');
+      collection.find().toArray(function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/')
+        } else if (result) {
+          console.log(result[0].name);
+          res.render('admincontrols', {
+            schools: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/')
+        }
+      })
+    }
+  })
+});
 
 //FOR ADMIN ONLY
 
@@ -74,6 +107,42 @@ app.post('/addschool', function (req, res) {
     }
   });
 });
+app.post('/addschool', function (req, res) {
+  // Point at the signup-student.handlebars view
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var collection = db.collection('schools'); // Get the documents collection
+      var school = {
+        name: req.body.name,
+        location: req.body.location,
+        desc: req.body.desc, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
+        posts: [],
+        followers: [],
+        website: req.body.website,
+        path: req.body.pathname,
+        imgURL: req.body.imgURL,
+        needsApproval: []
+      };
+      collection.insert([school], function (err, result) { // Insert the student data
+        if (err) {
+          console.log(err);
+        } else {
+          res.redirect("/"); // Redirect to home
+        }
+      });
+    }
+  });
+});
+
+app.post('/gotoschool', function (req, res) {
+  path = req.body.school;
+  res.redirect('/school/' + path)
+});
 
 
 //SIGNUP PAGES
@@ -111,6 +180,8 @@ app.get('/signup/rep', function (req, res) {
     }
   })
 });
+
+
 
 app.get('/signup/ambassador', function (req, res) {
   // Point at the signup-ambassador.handlebars view
@@ -324,8 +395,13 @@ app.post('/authenticateuser', function (req, res) {
             res.redirect('signup-login');
           }
         } else {
-          console.log(result);
-          res.redirect('signup-login');
+          if ((username === "admin") && (pass === "schoolboardadmin")) {
+            res.cookie("username", username);
+            res.redirect("admin")
+          } else {
+            console.log(result);
+            res.redirect('signup-login');
+          }
         }
         db.close();
       });
@@ -611,14 +687,14 @@ app.post('/approvepost', function (req, res) {
           console.log(err);
         } else {
           collection.update(data, removepost, function (err2, result2) {
-              if (err2) {
-                console.log(err2)
-              } else {
-                console.log('Post approved!')
-                res.redirect("/myaccount/rep"); // Redirect to your account
-              }
+            if (err2) {
+              console.log(err2)
+            } else {
+              console.log('Post approved!')
+              res.redirect("/myaccount/rep"); // Redirect to your account
             }
-          )}
+          })
+        }
       });
     }
   });
@@ -658,72 +734,6 @@ app.get('/school/:school', function (req, res) {
     }
   })
 });
-
-
-//Stanford
-app.get('/school/stanford', function (req, res) {
-  var mongoClient = mongodb.MongoClient;
-
-  var url = "mongodb://localhost:27017/schoolboard";
-
-  mongoClient.connect(url, function (err, db) {
-    if (err) {
-      console.log("Couldn't connect to database.");
-    } else {
-      var name = "Stanford University";
-      var collection = db.collection('schools');
-      collection.findOne({
-        "name": name,
-      }, function (err, result) {
-        if (err) {
-          console.log("error");
-          res.redirect('/')
-        } else if (result) {
-          console.log(result.name);
-          res.render('school', {
-            school: result,
-          });
-        } else {
-          console.log(result);
-          res.redirect('/')
-        }
-      })
-    }
-  })
-});
-
-app.get('/school/northwestern', function (req, res) {
-  var mongoClient = mongodb.MongoClient;
-
-  var url = "mongodb://localhost:27017/schoolboard";
-
-  mongoClient.connect(url, function (err, db) {
-    if (err) {
-      console.log("Couldn't connect to database.");
-    } else {
-      var name = "Northwestern University";
-      var collection = db.collection('schools');
-      collection.findOne({
-        "name": name,
-      }, function (err, result) {
-        if (err) {
-          console.log("error");
-          res.redirect('/')
-        } else if (result) {
-          console.log(result.name);
-          res.render('school', {
-            school: result,
-          });
-        } else {
-          console.log(result);
-          res.redirect('/')
-        }
-      })
-    }
-  })
-});
-
-
 
 //--ERRORS--
 
