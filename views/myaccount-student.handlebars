@@ -7,14 +7,12 @@
         <thead>
             <tr>
                 <th scope="col">School</th>
-                <th scope="col">Location</th>
             </tr>
         </thead>
         <tbody>
             {{#each student.schoolsFollowing}}​
             <tr>
-                <th scope="row"><a href="{{this.path}}">{{this.name}}</a></th>
-                <td>{{this.location}}</td>
+                <th scope="row"><a href="#">{{this}}</a></th>
             </tr>
             {{/each}}
         </tbody>

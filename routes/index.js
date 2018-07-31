@@ -735,6 +735,41 @@ app.get('/school/:school', function (req, res) {
   })
 });
 
+//--FOLLOWING
+app.post('/followschool', function (req, res) {
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var collection = db.collection('login'); // Get the documents collection
+      var data = {
+        'username': req.cookies.username
+      };
+      console.log('33' + req.body.School);
+      var post1 = {
+        $push: {
+          schoolsFollowing: req.body.School,
+        }
+      };
+      collection.update(data, post1, function (err, result) { // Updates the student data
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('followed school')
+          res.redirect(req.get('referer')); //refresh page
+        }
+      });
+    }
+  });
+});
+
+
+
+
+
 //--ERRORS--
 
 //404
