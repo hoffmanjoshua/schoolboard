@@ -15,14 +15,14 @@
                 <form method="post" action="/logout">
                     <input class="btn btn-secondary" type="submit" value="Logout" name="logout">
                 </form>
-                <li class="nav-item">
-                    <a class="nav-link" href="/myaccount">My Account</a>
-                </li>
             {{else}}
                 <li class="nav-item">
                     <a class="nav-link" href="/signup-login">Login/Sign Up</a>
                 </li>
             {{/if}}
+            <li class="nav-item">
+                    <a class="nav-link" href="/myaccount">My Account</a>
+                </li>
         </ul>
     </div>
 </nav>
