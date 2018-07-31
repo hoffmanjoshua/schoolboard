@@ -27,18 +27,18 @@ app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
   // Point at the home.handlebars view
-  res.render('home');
+  res.render('home', {isAuth: req.cookies.isAuth});
 });
 
 app.get('/signup-login', function (req, res) {
   // Point at the signup-login.handlebars view
-  res.render('signup-login');
+  res.render('signup-login', {isAuth: req.cookies.isAuth});
 });
 
 //SIGNUP PAGES
 app.get('/signup/student', function (req, res) {
   // Point at the signup-student.handlebars view
-  res.render('signup-student');
+  res.render('signup-student', {isAuth: req.cookies.isAuth});
 });
 
 app.get('/signup/rep', function (req, res) {
@@ -166,7 +166,8 @@ app.get('/myaccount/student', function (req, res) {
         } else if (result) {
           console.log(result.name);
           res.render('myaccount-student', {
-            student: result
+            student: result,
+            isAuth: req.cookies.isAuth
           });
         } else {
           console.log(result);
@@ -269,7 +270,8 @@ app.post('/authenticateuser', function (req, res) {
         if (err) {
           console.log(err);
         } else if (result.length) {
-          //set COOKIE
+          var isAuth = true;
+          res.cookie("isAuth", isAuth);
           res.cookie("username", username);
           if (result[0].type == "ambassador") {
             res.redirect("/myaccount/ambassador"); // Redirect to the updated student list
@@ -291,10 +293,10 @@ app.post('/authenticateuser', function (req, res) {
   });
 });
 
-
 //LOGOUT
 app.post('/logout', function (req, res) {
   res.clearCookie("username");
+  res.clearCookie("isAuth");
   res.redirect('/signup-login')
 });
 
