@@ -2,27 +2,16 @@
     <h1 class="text-center">My
         <span class="font-weight-bold">Representative</span> Account</h1>
     <br>
-    <h2>Write Post</h2>
-    <form>
-        Title:
-        <input class="form-control" type="text" name="Title">
-        <br> Post:
-        <textarea class="form-control" name="content"></textarea>
-        <br>
-        <button type="submit" class="btn btn-primary">Post</button>
-    </form>
-    <br>
     <h2>Approve Posts</h2>
-    {{#each posts}}
     <div class="jumbotron">
-        <h3>{{this.title}}</h3>
-        <h4>{{this.author}}</h4>
-        <p>{{this.content}}</p>
+        <form action="/approvepost" method="post">
+            <input class="form-control" name="Title" id="Title" style="background-color: rgb(100, 100, 100, 0.0); border: 0px;" value="{{posts.title}}" readonly>
+            <input class="form-control" name="Author" id="Author" style="background-color: rgb(100, 100, 100, 0.0); border: 0px;" value="{{posts.author}}" readonly>
+            <textarea class="form-control" name="Content" style="background-color: rgb(100, 100, 100, 0.0); border: 0px;" id="Content">{{posts.content}}</textarea>
+            <input name="School" value="{{rep.school}}" hidden>
+            <input type="submit" class="btn btn-primary" value="Approve">
+        </form>
     </div>
-    {{/each}}
-    <form>
-        <button type="submit" class="btn btn-primary">Approve</button>
-    </form>
     <br>
     <h2>Profile &amp; Settings</h2>
     <form class="form" name="form" action="/updaterep" method="post">
