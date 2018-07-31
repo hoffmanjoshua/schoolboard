@@ -26,19 +26,20 @@ app.set('port', port);
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
+  console.log(req.cookies.isAuth);
   // Point at the home.handlebars view
   res.render('home', {isAuth: req.cookies.isAuth});
 });
 
 app.get('/signup-login', function (req, res) {
   // Point at the signup-login.handlebars view
-  res.render('signup-login', {isAuth: req.cookies.isAuth});
+  res.render('signup-login');
 });
 
 //SIGNUP PAGES
 app.get('/signup/student', function (req, res) {
   // Point at the signup-student.handlebars view
-  res.render('signup-student', {isAuth: req.cookies.isAuth});
+  res.render('signup-student');
 });
 
 app.get('/signup/rep', function (req, res) {
@@ -199,7 +200,8 @@ app.get('/myaccount/ambassador', function (req, res) {
         } else if (result) {
           console.log(result.name);
           res.render('myaccount-ambassador', {
-            ambassador: result
+            ambassador: result,
+            isAuth: req.cookies.isAuth
           });
         } else {
           console.log(result);
@@ -238,6 +240,7 @@ app.get('/myaccount/rep', function (req, res) {
             console.log(resultschool);
             res.render('myaccount-rep', {
               rep: result,
+              isAuth: req.cookies.isAuth,
               posts: resultschool[0].needsApproval
             });
           } else {
