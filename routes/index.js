@@ -145,37 +145,7 @@ app.post('/addschool', function (req, res) {
     }
   });
 });
-app.post('/addschool', function (req, res) {
-  // Point at the signup-student.handlebars view
-  var MongoClient = mongodb.MongoClient;
-  var url = 'mongodb://localhost:27017/schoolboard';
-  MongoClient.connect(url, function (err, db) { // Connect to the server
-    if (err) {
-      console.log('Unable to connect to the Server:', err);
-    } else {
-      console.log('Connected to Server');
-      var collection = db.collection('schools'); // Get the documents collection
-      var school = {
-        name: req.body.name,
-        location: req.body.location,
-        desc: req.body.desc, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
-        posts: [],
-        followers: [],
-        website: req.body.website,
-        path: req.body.pathname,
-        imgURL: req.body.imgURL,
-        needsApproval: []
-      };
-      collection.insert([school], function (err, result) { // Insert the student data
-        if (err) {
-          console.log(err);
-        } else {
-          res.redirect("/"); // Redirect to home
-        }
-      });
-    }
-  });
-});
+
 
 app.post('/gotoschool', function (req, res) {
   path = req.body.school;
