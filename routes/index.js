@@ -879,17 +879,25 @@ app.post('/search', function (req, res) {
       collection.find(searchinput).toArray(function (err, result) { // Updates the student data
         if (err) {
           console.log(err);
-        } else {
+        } else if (result.length > 0) {
+          console.log('there are results');
           res.render("search", {
             schools : result
           }
         ); // Redirect to your account
+        } else {
+          console.log('no results');
+          res.render("no-results");
         }
       });
     }
   });
 });
 
+app.get('/no-results', function (req, res){
+  //Point at the no-results.handlebars view
+  res.render('no-results');
+})
 
 //--ERRORS--
 
