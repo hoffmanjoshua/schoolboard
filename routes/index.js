@@ -482,7 +482,7 @@ app.post('/authenticateuser', function (req, res) {
           }
         } else {
           if ((username === "admin") && (pass === "admin")) {
-            res.cookie("username", username);
+            res.cookie("username", username, cookieParams);
             res.redirect("admin")
           } else {
             console.log(result);
