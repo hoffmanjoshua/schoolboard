@@ -1,0 +1,18 @@
+<div class="container mt-3">
+    <form action="/schoolupdated" method="post">
+        Name:
+        <input class="form-control" type="text" name="name" value="{{school.name}}" readonly required>
+        <br> Location:
+        <input class="form-control" type="text" name="location" value="{{school.location}}" required>
+        <br> Description:
+        <textarea class="form-control" type="text" name="desc" required>{{school.desc}}</textarea>
+        <br> Website:
+        <input class="form-control" type="url" name="website" value="{{school.website}}" required>
+        <br> URL to header image:
+        <input class="form-control" type="url" name="imgURL" value="{{school.imgURL}}" required>
+        <br> Short name for url:
+        <input class="form-control" type="text" name="pathname" value="{{school.path}}" required>
+        <br>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>

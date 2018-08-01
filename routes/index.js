@@ -146,7 +146,75 @@ app.post('/addschool', function (req, res) {
   });
 });
 
+app.post('/updateschool', function (req, res) {
+  path = req.body.school;
+  console.log('test 1');
+  res.redirect('/updateschool/' + path)
+});
 
+app.get('/updateschool/:school', function (req, res) {
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var collection = db.collection('schools');
+      console.log(req.params.school);
+      collection.findOne({
+        "path": req.params.school,
+      }, function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/')
+        } else if (result) {
+          console.log('test 2');
+          res.render('updateschool', {
+            school: result,
+          });
+        } else {
+          console.log(result);
+          res.redirect('/')
+        }
+      })
+    }
+  })
+});
+
+app.post('/schoolupdated', function (req, res) {
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server test');
+      var collection = db.collection('schools'); // Get the documents collection
+      console.log(req.body.name);
+      var olddata1 = {
+        'name': req.body.name
+      }
+      var school1 = {
+        $set: {
+          location: req.body.location, // Get the school data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
+          desc: req.body.desc,
+          website: req.body.website,
+          imgURL: req.body.imgURL
+        }
+      };
+      collection.update(olddata1, school1, function (err, result) { // Updates the school data
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('end');
+          res.redirect("/admin"); // Redirect to your account
+        }
+      });
+    }
+  });
+});
 
 app.post('/gotoschool', function (req, res) {
   path = req.body.school;
@@ -404,7 +472,7 @@ app.post('/authenticateuser', function (req, res) {
             res.redirect('signup-login');
           }
         } else {
-          if ((username === "admin") && (pass === "schoolboardadmin")) {
+          if ((username === "admin") && (pass === "admin")) {
             res.cookie("username", username);
             res.redirect("admin")
           } else {
