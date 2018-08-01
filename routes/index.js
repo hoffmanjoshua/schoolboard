@@ -263,7 +263,7 @@ app.get('/myaccount', function (req, res) {
           }
         } else {
           console.log(result);
-          console.log('account not created')
+          res.render('signup-login-noaccount')
         }
         db.close();
       });
