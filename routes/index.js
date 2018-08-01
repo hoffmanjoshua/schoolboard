@@ -803,7 +803,39 @@ app.post('/followschool', function (req, res) {
 });
 
 
-
+//--SEARCH--
+app.post('/search', function (req, res) {
+  var input = req.body.Search;
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var collection = db.collection('schools');
+      collection.createIndex({
+        name: "text",
+        location: "text"
+      });
+      var searchinput = {
+        $text: {
+          $search: input
+        }
+      };
+      collection.find(searchinput).toArray(function (err, result) { // Updates the student data
+        if (err) {
+          console.log(err);
+        } else {
+          res.render("search", {
+            schools : result
+          }
+        ); // Redirect to your account
+        }
+      });
+    }
+  });
+});
 
 
 //--ERRORS--
