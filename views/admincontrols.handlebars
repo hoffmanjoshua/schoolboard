@@ -10,7 +10,18 @@
         {{/each}}
     </select>
     <br>
-    <input type="submit" value="Go to school" class="btn btn-primary">
+    <input type="submit" value="Go to school" class="btn btn-primary"> 
+    </form>
+    <br>
+    <form action="/updateschool" method="post">
+    <select class="form-control" name="school" required>
+        <option value="" selected disabled hidden>Schools</option>
+        {{#each schools}}
+        <option value="{{this.path}}">{{this.name}}</option>
+        {{/each}}
+    </select>
+    <br>
+    <input type="submit" value="Update School" class="btn btn-primary"> 
     </form>
     <br>
     <hr>
