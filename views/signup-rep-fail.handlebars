@@ -1,0 +1,32 @@
+<div class="alert alert-danger" role="alert">
+    The username you entered is already in use...
+</div>
+<div class="container mt-5 pl-4">
+    <h1 class="text-center"> Create My
+        <span class="font-weight-bold">Representative</span> Account</h1>
+    <br>
+    <h2>Sign Up</h2>
+    <form class="form" method="post" action="/addrep">
+        Name:
+        <input class="form-control" type="text" name="Name" required>
+        <br> School:
+        <select class="form-control" name="school" required>
+            <option value="" selected disabled hidden>Choose your school</option>
+            {{#each schools}}
+                <option value="{{this.name}}">{{this.name}}</option>
+            {{/each}}
+        </select>
+        <br> Role/title:
+        <input class="form-control" type="text" name="Role" required>
+        <br> Email:
+        <input class="form-control" name="Email" type="email" required>
+        <br> Bio:
+        <textarea class="form-control" name="Bio" required></textarea>
+        <br> Username:
+        <input class="form-control" type="text" name="Username" required>
+        <br> Password:
+        <input class="form-control" type="password" name="Password" required>
+        <br>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+</div>
