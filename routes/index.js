@@ -68,6 +68,11 @@ app.get('/signup-login', function (req, res) {
   res.render('signup-login');
 });
 
+app.get('/signup-login-fail', function (req, res) {
+  //Point at the signup-login-fail.handlebars view
+  res.render('signup-login-fail');
+})
+
 app.get('/admin', function (req, res) {
 
   if (req.cookies.username != "admin") {
@@ -433,7 +438,7 @@ app.post('/authenticateuser', function (req, res) {
             res.redirect("admin")
           } else {
             console.log(result);
-            res.redirect('signup-login');
+            res.redirect('signup-login-fail');
           }
         }
         db.close();
