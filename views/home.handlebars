@@ -4,3 +4,16 @@
         <span class="font-weight-bold">directly</span> with current student ambassadors and representatives. Learn more about schools through student and
         representative posts.</h4>
 </div>
+<div class="container">
+    <div class="list-group">
+        {{#each schools}}
+        <a href="/school/{{this.path}}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{this.name}}</h5>
+                <small>{{this.location}}</small>
+            </div>
+            <p class="mb-1">{{this.desc}}</p>
+        </a>
+        {{/each}}
+    </div>
+</div>
