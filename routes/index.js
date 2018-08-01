@@ -148,7 +148,6 @@ app.post('/addschool', function (req, res) {
 
 app.post('/updateschool', function (req, res) {
   path = req.body.school;
-  console.log('test 1');
   res.redirect('/updateschool/' + path)
 });
 
@@ -170,7 +169,6 @@ app.get('/updateschool/:school', function (req, res) {
           console.log("error");
           res.redirect('/')
         } else if (result) {
-          console.log('test 2');
           res.render('updateschool', {
             school: result,
           });
@@ -190,7 +188,7 @@ app.post('/schoolupdated', function (req, res) {
     if (err) {
       console.log('Unable to connect to the Server:', err);
     } else {
-      console.log('Connected to Server test');
+      console.log('Connected to Server');
       var collection = db.collection('schools'); // Get the documents collection
       console.log(req.body.name);
       var olddata1 = {
