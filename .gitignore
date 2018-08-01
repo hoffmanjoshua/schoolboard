@@ -6,3 +6,4 @@
 *.turtle
 *.interim
 *.DS_Store
+.env

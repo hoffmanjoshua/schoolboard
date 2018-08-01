@@ -6,7 +6,16 @@ var mongodb = require('mongodb');
 var app = express();
 
 var cookieParser = require('cookie-parser');
-app.use(cookieParser());
+
+var cookieEncrypter = require('cookie-encrypter');
+const secretKey = "jklfasd893fyh9yhdhLagniappedl83j";
+const cookieParams = {
+  httpOnly: true,
+  signed: true,
+  maxAge: 300000
+}
+app.use(cookieParser(secretKey));
+app.use(cookieEncrypter(secretKey))
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({
@@ -75,7 +84,7 @@ app.get('/signup-login-fail', function (req, res) {
 
 app.get('/admin', function (req, res) {
 
-  if (req.cookies.username != "admin") {
+  if (req.signedCookies.username != "admin") {
     res.redirect('/')
     return false
   }
@@ -233,7 +242,7 @@ app.get('/myaccount', function (req, res) {
       console.log('Unable to connect to the Server:', err);
     } else {
       console.log('Connected to Server');
-      var username = req.cookies.username;
+      var username = req.signedCookies.username;
       var collection = db.collection('login');
       collection.find({
         "username": username,
@@ -275,7 +284,7 @@ app.get('/myaccount/student', function (req, res) {
     if (err) {
       console.log("Couldn't connect to database.");
     } else {
-      var username = req.cookies.username;
+      var username = req.signedCookies.username;
       var collection = db.collection('login');
       collection.findOne({
         "username": username,
@@ -307,7 +316,7 @@ app.get('/myaccount/ambassador', function (req, res) {
     if (err) {
       console.log("Couldn't connect to database.");
     } else {
-      var username = req.cookies.username;
+      var username = req.signedCookies.username;
       var collection = db.collection('login');
       collection.findOne({
         "username": username,
@@ -340,7 +349,7 @@ app.get('/myaccount/rep', function (req, res) {
     if (err) {
       console.log("Couldn't connect to database.");
     } else {
-      var username = req.cookies.username;
+      var username = req.signedCookies.username;
       var collection = db.collection('login');
       collection.findOne({
         "username": username,
@@ -391,7 +400,7 @@ app.post('/authenticateuser', function (req, res) {
           console.log(err);
         } else if (result.length) {
           //set COOKIE
-          res.cookie("username", username);
+          res.cookie("username", username, cookieParams);
           if (result[0].type == "ambassador") {
             res.redirect("/myaccount/ambassador"); // Redirect to the updated student list
           } else if (result[0].type == "student") {
@@ -404,7 +413,7 @@ app.post('/authenticateuser', function (req, res) {
           }
         } else {
           if ((username === "admin") && (pass === "schoolboardadmin")) {
-            res.cookie("username", username);
+            res.cookie("username", username, cookieParams);
             res.redirect("admin")
           } else {
             console.log(result);
@@ -535,7 +544,7 @@ app.post('/updatestudent', function (req, res) {
       console.log('Connected to Server');
       var collection = db.collection('login'); // Get the documents collection
       var olddata = {
-        'username': req.cookies.username
+        'username': req.signedCookies.username
       }
       var student1 = {
         $set: {
@@ -569,7 +578,7 @@ app.post('/updateambassador', function (req, res) {
       console.log('Connected to Server');
       var collection = db.collection('login'); // Get the documents collection
       var olddata = {
-        'username': req.cookies.username
+        'username': req.signedCookies.username
       }
       var ambassador1 = {
         $set: {
@@ -603,7 +612,7 @@ app.post('/updaterep', function (req, res) {
       console.log('Connected to Server');
       var collection = db.collection('login'); // Get the documents collection
       var olddata = {
-        'username': req.cookies.username
+        'username': req.signedCookies.username
       }
       var rep1 = {
         $set: {
@@ -754,7 +763,7 @@ app.post('/followschool', function (req, res) {
       console.log('Connected to Server');
       var collection = db.collection('login'); // Get the documents collection
       var data = {
-        'username': req.cookies.username
+        'username': req.signedCookies.username
       };
       console.log('33' + req.body.School);
       var post1 = {

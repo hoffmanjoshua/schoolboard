@@ -9,6 +9,7 @@
   "author": "Joshua Hoffman <hoffmanjoshua@outlook.com> (hoffmanjoshua.com)",
   "license": "ISC",
   "dependencies": {
+    "cookie-encrypter": "^1.0.1",
     "cookie-parser": "^1.4.3",
     "cookies": "^0.7.1",
     "express": "^4.16.3",
