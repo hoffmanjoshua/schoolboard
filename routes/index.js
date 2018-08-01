@@ -26,8 +26,41 @@ app.set('port', port);
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
-  // Point at the home.handlebars view
-  res.render('home');
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var collection = db.collection('schools');
+      collection.find().toArray(function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/')
+        } else if (result) {
+          result.sort(function (a, b) {
+            var x = a.name.toLowerCase();
+            var y = b.name.toLowerCase();
+            if (x < y) {
+              return -1;
+            }
+            if (x > y) {
+              return 1;
+            }
+            return 0;
+          });
+          res.render('home', {
+            schools: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/')
+        }
+      })
+    }
+  })
 });
 
 app.get('/signup-login', function (req, res) {
@@ -37,7 +70,7 @@ app.get('/signup-login', function (req, res) {
 
 app.get('/admin', function (req, res) {
 
-  if (req.cookies.username != "admin"){
+  if (req.cookies.username != "admin") {
     res.redirect('/')
     return false
   }
@@ -751,9 +784,12 @@ app.post('/followschool', function (req, res) {
       console.log('33' + req.body.School);
       var post1 = {
         $push: {
-          schoolsFollowing: req.body.School,
+          schoolsFollowing: {
+            name: req.body.School,
+            path: req.body.path
+          }
         }
-      };
+      }
       collection.update(data, post1, function (err, result) { // Updates the student data
         if (err) {
           console.log(err);

@@ -12,7 +12,7 @@
         <tbody>
             {{#each student.schoolsFollowing}}​
             <tr>
-                <th scope="row"><a href="#">{{this}}</a></th>
+                <th scope="row"><a href="/school/{{this.path}}">{{this.name}}</a></th>
             </tr>
             {{/each}}
         </tbody>
