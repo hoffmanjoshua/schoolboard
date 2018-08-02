@@ -12,7 +12,7 @@ const secretKey = "jklfasd893fyh9yhdhLagniappedl83j";
 const cookieParams = {
   httpOnly: true,
   signed: true,
-  maxAge: 300000
+  maxAge: 3000000
 }
 app.use(cookieParser(secretKey));
 app.use(cookieEncrypter(secretKey))
@@ -1018,17 +1018,12 @@ app.post('/search', function (req, res) {
         } else if (result.length > 0) {
           console.log('there are results');
           res.render("search", {
-<<<<<<< HEAD
-            schools: result
-          }); // Redirect to your account
-=======
             schools : result
           }
         ); // Redirect to your account
         } else {
           console.log('no results');
           res.render("no-results");
->>>>>>> 5d1f809e17c87cd52e3e4cd210c587b0b420028e
         }
       });
     }

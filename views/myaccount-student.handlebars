@@ -6,13 +6,13 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">School</th>
+                <th scope="col">School</th><th></th>
             </tr>
         </thead>
         <tbody>
             {{#each student.schoolsFollowing}}​
             <tr>
-                <form action="/unfollowschool" method="post"><th scope="row"><a href="/school/{{this.path}}">{{this.name}}</a></th><td><input type="text" hidden value="{{this.name}}" name="SchoolFollowing"><input type="text" hidden value="{{../student.name}}" name="StudentName"><input type="submit" class="btn btn-danger btn-sm" value="Unfollow"></td></form>
+                <form action="/unfollowschool" method="post"><td scope="row"><a href="/school/{{this.path}}">{{this.name}}</a></td><td><input type="text" hidden value="{{this.name}}" name="SchoolFollowing"><input type="text" hidden value="{{../student.name}}" name="StudentName"><input type="submit" class="btn btn-danger btn-sm" value="Unfollow"></td></form>
             </tr>
             {{/each}}
         </tbody>
