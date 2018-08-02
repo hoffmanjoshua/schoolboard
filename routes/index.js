@@ -44,7 +44,7 @@ app.get('/', function (req, res) {
       console.log("Couldn't connect to database.");
     } else {
       var collection = db.collection('schools');
-      collection.find().toArray(function (err, result) {
+      collection.find().limit(4).toArray(function (err, result) {
         if (err) {
           console.log("error");
           res.redirect('/')

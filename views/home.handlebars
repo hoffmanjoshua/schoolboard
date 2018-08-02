@@ -4,16 +4,141 @@
         <span class="font-weight-bold">directly</span> with current student ambassadors and representatives. Learn more about schools through student and
         representative posts.</h4>
 </div>
-<div class="container mt-3">
-    <div class="list-group">
+
+<style>#container {
+    width: 100%;
+    overflow: hidden;
+    margin: 50px auto;
+}
+
+/*photobanner*/
+.photobanner {
+    height: 233px;
+    width: 3550px;
+}
+
+.photobanner img {
+    height: 233px;
+}
+
+/*keyframe animations*/
+
+.first {
+    -webkit-animation: bannermove 30s linear infinite;
+    -moz-animation: bannermove 30s linear infinite;
+    -ms-animation: bannermove 30s linear infinite;
+    -o-animation: bannermove 30s linear infinite;
+    animation: bannermove 30s linear infinite;
+}
+
+@keyframes bannermove {
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
+}
+
+@-moz-keyframes bannermove {
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
+}
+
+@-webkit-keyframes bannermove {
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
+}
+
+@-ms-keyframes bannermove {
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
+}
+
+@-o-keyframes bannermove {
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
+}
+
+.photobanner {
+    height: 233px;
+    width: 3550px;
+}
+
+.photobanner img {
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.photobanner img:hover {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+    cursor: pointer;
+    -webkit-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+</style>
+<div id="container">
+    <div class="photobanner">
+        <img class="first" src="harvard.jpg" alt="" />
+        <img src="https://www.bestcollegereviews.org/wp-content/uploads/2014/11/harvard-history.jpg" alt="" />
+        <img src="https://news.yale.edu/sites/default/files/styles/featured_media/public/commons_at_schwarzman_ctr-yale.jpg?itok=2-E_gvIO&c=07307e7d6a991172b9f808eb83b18804"
+            alt="" />
+        <img src="https://www.michigandaily.com/sites/default/files/styles/large/public/160125/big%20house.IMG5993RGB.jpg?itok=A9TCgzuT"
+            alt="" />
+        <img src="http://ibankcoin.com/zeropointnow/files/2018/03/100917787-Stanford_Oval_May_2011_panorama_r.jpg" alt=""
+        />
+        <img src="http://mediad.publicbroadcasting.net/p/wcbu/files/styles/medium/public/201705/northern_illinois_university_facebook.jpg"
+            alt="" />
+        <img src="https://s3.amazonaws.com/libapps/accounts/24034/images/New_building.jpg" alt="" />
+        <img src="http://greenbillion.org/wp-content/uploads/2011/10/denison_university_02.jpg" alt="" />
+        <img src="http://www.gobeyondthebrochure.com/wp-content/uploads/2015/10/A-Wavering-Sense-of-Safety-at-University-of-California-Berkeley.jpg"
+            alt="" />
+        <img src="http://i0.wp.com/www.dailycal.org/assets/uploads/2016/12/libraryhopping_nicole_white_file-900x580.jpg"
+            alt="" />
+    </div>
+</div>
+<div class="container">
+    <div class="list-group"> 
         {{#each schools}}
         <a href="/school/{{this.path}}" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{this.name}}</h5>
-                <small>{{this.location}}</small>
+                <h5 class="mb-1"> {{this.name }}
+
+                </h5>
+                <small> {{this.location}}
+
+                </small>
             </div>
-            <p class="mb-1">{{this.desc}}</p>
-        </a>
+            <p class="mb-1"> {{this.desc}}
+
+            </p>
+        </a> 
         {{/each}}
+
     </div>
 </div>
