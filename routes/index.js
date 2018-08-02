@@ -1042,7 +1042,7 @@ app.post('/search', function (req, res) {
         ); // Redirect to your account
         } else {
           console.log('no results');
-          res.render("no-results");
+          res.redirect("no-results");
         }
       });
     }
@@ -1051,8 +1051,42 @@ app.post('/search', function (req, res) {
 
 app.get('/no-results', function (req, res){
   //Point at the no-results.handlebars view
-  res.render('no-results');
-})
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var collection = db.collection('schools');
+      collection.find().toArray(function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/')
+        } else if (result) {
+          result.sort(function (a, b) {
+            var x = a.name.toLowerCase();
+            var y = b.name.toLowerCase();
+            if (x < y) {
+              return -1;
+            }
+            if (x > y) {
+              return 1;
+            }
+            return 0;
+          });
+          res.render('no-results', {
+            schools: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/')
+        }
+      })
+    }
+  })
+});
 
 //--ERRORS--
 
