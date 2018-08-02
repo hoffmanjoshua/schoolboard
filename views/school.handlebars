@@ -26,7 +26,7 @@
     {{#each school.posts}}​
         <div class="jumbotron">
             <h3>{{this.title}}</h3> 
-            <h4>{{this.author}}</h4>
+            <a href="/ambassadors/{{this.username}}"><h4>{{this.author}}</h4></a>
             <p>{{this.content}}</p>
         </div>
     {{/each}}

@@ -826,7 +826,8 @@ app.post('/submitforapproval', function (req, res) {
           needsApproval: {
             "title": req.body.Title,
             "author": req.body.author,
-            "content": req.body.content
+            "content": req.body.content,
+            "username": req.body.username
           }
         }
       };
@@ -860,7 +861,8 @@ app.post('/approvepost', function (req, res) {
           posts: {
             "title": req.body.Title,
             "author": req.body.Author,
-            "content": req.body.Content
+            "content": req.body.Content,
+            "username": req.body.username
           }
         }
       };
@@ -1078,6 +1080,100 @@ app.get('/no-results', function (req, res){
           });
           res.render('no-results', {
             schools: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/')
+        }
+      })
+    }
+  })
+});
+
+//--PROFILES--
+app.get('/ambassadors/:user', function (req, res) {
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var username = req.params.user;
+      var collection = db.collection('login');
+      collection.findOne({
+        "username": username,
+      }, function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/')
+        } else if (result) {
+          console.log('username:'+ result.username);
+          res.render('profile-ambassador', {
+            ambassador: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/')
+        }
+      })
+    }
+  })
+});
+
+app.get('/reps/:user', function (req, res) {
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var username = req.params.user;
+      var collection = db.collection('login');
+      collection.findOne({
+        "username": username,
+      }, function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/')
+        } else if (result) {
+          console.log(result.name);
+          res.render('profile-rep', {
+            rep: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/')
+        }
+      })
+    }
+  })
+});
+
+app.get('/students/:user', function (req, res) {
+  var mongoClient = mongodb.MongoClient;
+
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var username = req.params.user;
+      var collection = db.collection('login');
+      collection.findOne({
+        "username": username,
+      }, function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/')
+        } else if (result) {
+          console.log(result.name);
+          res.render('profile-student', {
+            student: result
           });
         } else {
           console.log(result);

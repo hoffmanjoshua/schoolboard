@@ -7,6 +7,7 @@
         <form action="/approvepost" method="post">
             <input class="form-control" name="Title" id="Title" style="background-color: rgb(100, 100, 100, 0.0); border: 0px;" value="{{posts.title}}" readonly>
             <input class="form-control" name="Author" id="Author" style="background-color: rgb(100, 100, 100, 0.0); border: 0px;" value="{{posts.author}}" readonly>
+            <input hidden tyoe="text" name="username" value="{{posts.username}}">
             <textarea class="form-control" name="Content" style="background-color: rgb(100, 100, 100, 0.0); border: 0px;" id="Content">{{posts.content}}</textarea>
             <input name="School" value="{{rep.school}}" hidden>
             <input type="submit" class="btn btn-primary" value="Approve">
