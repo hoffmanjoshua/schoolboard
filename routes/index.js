@@ -74,6 +74,7 @@ app.get('/', function (req, res) {
 
 app.get('/signup-login', function (req, res) {
   // Point at the signup-login.handlebars view
+  res.clearCookie("username");
   res.render('signup-login');
 });
 
