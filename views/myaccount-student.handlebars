@@ -12,7 +12,7 @@
         <tbody>
             {{#each student.schoolsFollowing}}​
             <tr>
-                <th scope="row"><a href="/school/{{this.path}}">{{this.name}}</a></th>
+                <form action="/unfollowschool" method="post"><th scope="row"><a href="/school/{{this.path}}">{{this.name}}</a></th><td><input type="text" hidden value="{{this.name}}" name="SchoolFollowing"><input type="text" hidden value="{{../student.name}}" name="StudentName"><input type="submit" class="btn btn-danger btn-sm" value="Unfollow"></td></form>
             </tr>
             {{/each}}
         </tbody>

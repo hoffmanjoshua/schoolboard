@@ -855,6 +855,40 @@ app.post('/followschool', function (req, res) {
   });
 });
 
+app.post('/unfollowschool', function (req, res) {
+  var MongoClient = mongodb.MongoClient;
+  var url = 'mongodb://localhost:27017/schoolboard';
+  MongoClient.connect(url, function (err, db) { // Connect to the server
+    if (err) {
+      console.log('Unable to connect to the Server:', err);
+    } else {
+      console.log('Connected to Server');
+      var collection = db.collection('login'); // Get the documents collection
+      var data = {
+        'name': req.body.StudentName
+      };
+      var removepost = {
+        $pull: {
+          schoolsFollowing: {
+            "name": req.body.SchoolFollowing,
+          }
+        }
+      };
+      console.log('Student: ' + req.body.StudentName);
+      console.log('School To Remove: ' + req.body.SchoolFollowing);
+      collection.update(data, removepost, function (err2, result2) {
+        if (err2) {
+          console.log(err2)
+        } else {
+          console.log('School Removed')
+          res.redirect(req.get('referer')) // Redirect to your account
+        }
+      });
+    }
+  });
+});
+
+
 
 //--SEARCH--
 app.post('/search', function (req, res) {
@@ -881,9 +915,8 @@ app.post('/search', function (req, res) {
           console.log(err);
         } else {
           res.render("search", {
-            schools : result
-          }
-        ); // Redirect to your account
+            schools: result
+          }); // Redirect to your account
         }
       });
     }
