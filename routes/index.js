@@ -934,26 +934,44 @@ app.post('/followschool', function (req, res) {
     } else {
       console.log('Connected to Server');
       var collection = db.collection('login'); // Get the documents collection
-      var data = {
-        'username': req.signedCookies.username
-      };
-      console.log('33' + req.body.School);
-      var post1 = {
-        $push: {
-          schoolsFollowing: {
-            name: req.body.School,
-            path: req.body.path
+      collection.findOne({
+        'username': req.signedCookies.username,
+        'schoolsFollowing': {
+          $elemMatch: {
+            'name': req.body.School
           }
         }
-      }
-      collection.update(data, post1, function (err, result) { // Updates the student data
+      }, function (err, result) {
         if (err) {
-          console.log(err);
+          console.log("error");
+          res.redirect('/')
+        } else if (result) {
+          console.log('already following');
+          res.redirect('/myaccount/student');
         } else {
-          console.log('followed school')
-          res.redirect(req.get('referer')); //refresh page
+          console.log('not following');
+          var data = {
+            'username': req.signedCookies.username
+          };
+          console.log('33' + req.body.School);
+          var post1 = {
+            $push: {
+              schoolsFollowing: {
+                name: req.body.School,
+                path: req.body.path
+              }
+            }
+          }
+          collection.update(data, post1, function (err, result) { // Updates the student data
+            if (err) {
+              console.log(err);
+            } else {
+              console.log('followed school')
+              res.redirect(req.get('referer')); //refresh page
+            }
+          });
         }
-      });
+      })
     }
   });
 });
