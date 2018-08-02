@@ -237,6 +237,11 @@ app.get('/signup/student', function (req, res) {
   res.render('signup-student');
 });
 
+app.get('/signup/student-fail', function (req, res) {
+  //Point at the signup-student-fail.handlebars.view
+  res.render('signup-student-fail');
+})
+
 app.get('/signup/rep', function (req, res) {
   // Point at the signup-rep.handlebars view
   // Point at the signup-ambassador.handlebars view
@@ -267,7 +272,35 @@ app.get('/signup/rep', function (req, res) {
   })
 });
 
+app.get('/signup/rep-fail', function (req, res) {
+  // Point at the signup-rep.handlebars view
+  // Point at the signup-ambassador.handlebars view
+  var mongoClient = mongodb.MongoClient;
 
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var collection = db.collection('schools');
+      collection.find().toArray(function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/signup-login')
+        } else if (result) {
+          console.log(result[0].name);
+          res.render('signup-rep-fail', {
+            schools: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/signup-login')
+        }
+      })
+    }
+  })
+});
 
 app.get('/signup/ambassador', function (req, res) {
   // Point at the signup-ambassador.handlebars view
@@ -298,7 +331,34 @@ app.get('/signup/ambassador', function (req, res) {
   })
 });
 
+app.get('/signup/ambassador-fail', function (req, res) {
+  // Point at the signup-ambassador.handlebars view
+  var mongoClient = mongodb.MongoClient;
 
+  var url = "mongodb://localhost:27017/schoolboard";
+
+  mongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log("Couldn't connect to database.");
+    } else {
+      var collection = db.collection('schools');
+      collection.find().toArray(function (err, result) {
+        if (err) {
+          console.log("error");
+          res.redirect('/signup-login')
+        } else if (result) {
+          console.log(result[0].name);
+          res.render('signup-ambassador-fail', {
+            schools: result
+          });
+        } else {
+          console.log(result);
+          res.redirect('/signup-login')
+        }
+      })
+    }
+  })
+});
 
 //MYACCOUNT
 
@@ -514,22 +574,36 @@ app.post('/addstudent', function (req, res) {
     } else {
       console.log('Connected to Server');
       var collection = db.collection('login'); // Get the documents collection
-      var student1 = {
-        name: req.body.Name,
-        HSyear: req.body.HSYear, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
-        HighSchool: req.body.HighSchool,
-        admissionYear: req.body.admissionYear,
-        email: req.body.Email,
-        username: req.body.Username,
-        password: req.body.Password,
-        schoolsFollowing: [],
-        type: "student"
-      };
-      collection.insert([student1], function (err, result) { // Insert the student data
+      collection.findOne({
+        "username": req.body.Name
+      }, function (err, result) {
         if (err) {
-          console.log(err);
+          console.log("error");
+          res.redirect('/signup-student')
+        } else if (result) {
+          console.log(result.name);
+          console.log('username is taken');
+          res.redirect('/signup/student-fail');
         } else {
-          res.redirect("/"); // Redirect to home
+          console.log('username works');
+          var student1 = {
+            name: req.body.Name,
+            HSyear: req.body.HSYear, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
+            HighSchool: req.body.HighSchool,
+            admissionYear: req.body.admissionYear,
+            email: req.body.Email,
+            username: req.body.Username,
+            password: req.body.Password,
+            schoolsFollowing: [],
+            type: "student"
+          };
+          collection.insert([student1], function (err, result) { // Insert the student data
+            if (err) {
+              console.log(err);
+            } else {
+              res.redirect("/"); // Redirect to home
+            }
+          });      
         }
       });
     }
@@ -546,25 +620,39 @@ app.post('/addambassador', function (req, res) {
     } else {
       console.log('Connected to Server');
       var collection = db.collection('login'); // Get the documents collection
-      var ambassador1 = {
-        name: req.body.Name,
-        school: req.body.school,
-        gradYear: req.body.gradYear, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
-        year: req.body.year,
-        major: req.body.major,
-        email: req.body.Email,
-        bio: req.body.Bio,
-        username: req.body.Username,
-        password: req.body.Password,
-        type: "ambassador"
-      };
-      collection.insert([ambassador1], function (err, result) { // Insert the student data
+      collection.findOne({
+        "username": req.body.Name
+      }, function (err, result) {
         if (err) {
-          console.log(err);
+          console.log("error");
+          res.redirect('/signup-ambassador')
+        } else if (result) {
+          console.log(result.name);
+          console.log('username is taken');
+          res.redirect('/signup/ambassador-fail');
         } else {
-          res.redirect("/"); // Redirect to home
+          console.log('username works');
+          var ambassador1 = {
+            name: req.body.Name,
+            school: req.body.school,
+            gradYear: req.body.gradYear, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
+            year: req.body.year,
+            major: req.body.major,
+            email: req.body.Email,
+            bio: req.body.Bio,
+            username: req.body.Username,
+            password: req.body.Password,
+            type: "ambassador"
+          };
+          collection.insert([ambassador1], function (err, result) { // Insert the student data
+            if (err) {
+              console.log(err);
+            } else {
+              res.redirect("/"); // Redirect to home
+            }
+          });
         }
-      });
+      })
     }
   });
 });
@@ -579,23 +667,37 @@ app.post('/addrep', function (req, res) {
     } else {
       console.log('Connected to Server');
       var collection = db.collection('login'); // Get the documents collection
-      var rep1 = {
-        name: req.body.Name,
-        school: req.body.school,
-        role: req.body.Role, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
-        email: req.body.Email,
-        bio: req.body.Bio,
-        username: req.body.Username,
-        password: req.body.Password,
-        type: "rep"
-      };
-      collection.insert([rep1], function (err, result) { // Insert the student data
+      collection.findOne({
+        "username": req.body.Name
+      }, function (err, result) {
         if (err) {
-          console.log(err);
+          console.log("error");
+          res.redirect('/signup-rep')
+        } else if (result) {
+          console.log(result.name);
+          console.log('username is taken');
+          res.redirect('/signup/rep-fail');
         } else {
-          res.redirect("/"); // Redirect to home
+          console.log('username works');
+          var rep1 = {
+            name: req.body.Name,
+            school: req.body.school,
+            role: req.body.Role, // Get the student data    	city: req.body.city, state: req.body.state, sex: req.body.sex,
+            email: req.body.Email,
+            bio: req.body.Bio,
+            username: req.body.Username,
+            password: req.body.Password,
+            type: "rep"
+          };
+          collection.insert([rep1], function (err, result) { // Insert the student data
+            if (err) {
+              console.log(err);
+            } else {
+              res.redirect("/"); // Redirect to home
+            }
+          });
         }
-      });
+      })
     }
   });
 });
@@ -913,16 +1015,30 @@ app.post('/search', function (req, res) {
       collection.find(searchinput).toArray(function (err, result) { // Updates the student data
         if (err) {
           console.log(err);
-        } else {
+        } else if (result.length > 0) {
+          console.log('there are results');
           res.render("search", {
+<<<<<<< HEAD
             schools: result
           }); // Redirect to your account
+=======
+            schools : result
+          }
+        ); // Redirect to your account
+        } else {
+          console.log('no results');
+          res.render("no-results");
+>>>>>>> 5d1f809e17c87cd52e3e4cd210c587b0b420028e
         }
       });
     }
   });
 });
 
+app.get('/no-results', function (req, res){
+  //Point at the no-results.handlebars view
+  res.render('no-results');
+})
 
 //--ERRORS--
 
