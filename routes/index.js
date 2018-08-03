@@ -936,6 +936,7 @@ app.post('/followschool', function (req, res) {
     } else {
       console.log('Connected to Server');
       var collection = db.collection('login'); // Get the documents collection
+      var collection2 = db.collection('schools');
       collection.findOne({
         'username': req.signedCookies.username,
         'schoolsFollowing': {
@@ -955,6 +956,9 @@ app.post('/followschool', function (req, res) {
           var data = {
             'username': req.signedCookies.username
           };
+          var data2 = {
+            'name': req.body.School
+          }
           console.log('33' + req.body.School);
           var post1 = {
             $push: {
@@ -971,6 +975,21 @@ app.post('/followschool', function (req, res) {
               console.log('followed school')
             }
           });
+          var post2 = {
+            $push: {
+              followers: {
+                name: req.signedCookies.username
+              }
+            }
+          }
+          collection2.update(data2, post2, function (err, result) {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log('follower added to school')
+              res.redirect(req.get('referer'));
+            }
+          })
         }
       })
     }
