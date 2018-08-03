@@ -969,7 +969,6 @@ app.post('/followschool', function (req, res) {
               console.log(err);
             } else {
               console.log('followed school')
-              res.redirect(req.get('referer')); //refresh page
             }
           });
         }
