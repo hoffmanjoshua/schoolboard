@@ -31,3 +31,11 @@
         </div>
     {{/each}}
 </div>
+<div class="container">
+    <h3>Followers:</h3>
+    <ul>
+        {{#each school.followers}}
+            <li><a href="/students/{{this.name}}"><h6>{{this.name}}</h6></a></li>
+        {{/each}}
+    </ul>
+</div>
