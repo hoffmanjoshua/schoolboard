@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./bin/www"
   },
-  "author": "Joshua Hoffman <hoffmanjoshua@outlook.com> (hoffmanjoshua.com)",
+  "author": "Joshua Hoffman, Max Santosa, Charles Ye",
   "license": "ISC",
   "dependencies": {
     "cookie-encrypter": "^1.0.1",
@@ -14,9 +14,9 @@
     "cookies": "^0.7.1",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
-    "handlebars": "^4.0.11",
+    "handlebars": "^4.1.2",
     "kerberos": "~0.0.17",
-    "mongodb": "~2.0.33",
-    "morgan": "~1.9.0"
+    "mongodb": "^2.2.36",
+    "morgan": "^1.9.1"
   }
 }
