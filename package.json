@@ -16,7 +16,7 @@
     "express-handlebars": "^3.0.0",
     "handlebars": "^4.1.2",
     "kerberos": "~0.0.17",
-    "mongodb": "^2.2.36",
+    "mongodb": "^3.1.13",
     "morgan": "^1.9.1"
   }
 }
